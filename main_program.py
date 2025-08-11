@@ -8,12 +8,14 @@ def tech_panel_call():
         tech_panel.prof_menu()
     if res == False:
         print("wrong information")
+        
 def student_panel_call():
-    res= student_panel.pas_enter()
-    if  res == True:
-        student_panel.stu_menu()
-    if res == False:
-        print("wrong enterance")
+    student_id = student_panel.pas_enter()
+    if student_id:
+        student_panel.stu_menu(student_id)
+    else:
+        print("Exit or login failed.")
+
 
 def main_menu():
     while True:

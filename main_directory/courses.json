@@ -1,0 +1,62 @@
+[
+    {
+        "course_id": "C001",
+        "title": "Thesis Research 1",
+        "professor_id": "P001",
+        "year": 1404,
+        "semester": "First",
+        "capacity": 3,
+        "enrolled": 1,
+        "units": 3,
+        "sessions": 15,
+        "resources": ["Research Methods Book", "Journal A"]
+    },
+    {
+        "course_id": "C002",
+        "title": "Advanced Thesis Seminar",
+        "professor_id": "P002",
+        "year": 1404,
+        "semester": "First",
+        "capacity": 2,
+        "enrolled": 0,
+        "units": 2,
+        "sessions": 12,
+        "resources": ["Seminar Notes", "Conference Papers"]
+    },
+    {
+        "course_id": "C003",
+        "title": "Thesis Research 2",
+        "professor_id": "P003",
+        "year": 1404,
+        "semester": "Second",
+        "capacity": 4,
+        "enrolled": 2,
+        "units": 3,
+        "sessions": 15,
+        "resources": ["Thesis Writing Guide", "Sample Thesis"]
+    },
+    {
+        "course_id": "C004",
+        "title": "Data Analysis for Thesis",
+        "professor_id": "P001",
+        "year": 1404,
+        "semester": "Second",
+        "capacity": 5,
+        "enrolled": 3,
+        "units": 3,
+        "sessions": 10,
+        "resources": ["Data Analysis Textbook", "Software Tutorials"]
+    },
+    {
+        "course_id": "C005",
+        "title": "Literature Review Techniques",
+        "professor_id": "P002",
+        "year": 1404,
+        "semester": "First",
+        "capacity": 3,
+        "enrolled": 1,
+        "units": 2,
+        "sessions": 8,
+        "resources": ["Review Articles", "Library Database"]
+    }
+]
