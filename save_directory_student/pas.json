@@ -1,0 +1,52 @@
+[
+    {
+        "name": "Student1",
+        "student_id": "482917365",
+        "password": "kD9xP3mQ"
+    },
+    {
+        "name": "Student2",
+        "student_id": "592834761",
+        "password": "tR8wY6hJ"
+    },
+    {
+        "name": "Student3",
+        "student_id": "183947652",
+        "password": "mQ2pV7zX"
+    },
+    {
+        "name": "Student4",
+        "student_id": "739185462",
+        "password": "yU4dN1aB"
+    },
+    {
+        "name": "Student5",
+        "student_id": "284759613",
+        "password": "eL7qK9tC"
+    },
+    {
+        "name": "Student6",
+        "student_id": "695182374",
+        "password": "zP3mH2wQ"
+    },
+    {
+        "name": "Student7",
+        "student_id": "918273645",
+        "password": "aS6vT8lM"
+    },
+    {
+        "name": "Student8",
+        "student_id": "374829156",
+        "password": "qR9nP5cV"
+    },
+    {
+        "name": "Student9",
+        "student_id": "826495173",
+        "password": "wM4kD2sJ"
+    },
+    {
+        "name": "Student10",
+        "student_id": "159482736",
+        "password": "uB8hQ7gL"
+    }
+]
