@@ -23,7 +23,7 @@ def main_menu():
             student_panel_call()
         elif tar == "2":
             tech_panel_call()
-        elif tar == "X" or "x":
+        elif tar.lower() == "x":
             break
         else:
             print("enter a valid number!")
