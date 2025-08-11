@@ -2,11 +2,13 @@ import json
 from datetime import datetime
 
 def get_prof_c(c_id):
+    '''convert course id to professor id'''
     for course in courses:
         course["course_id"] == c_id
         return course["professor_id"]
     
 class Student_c:
+    '''make class for student and request method'''
     def __init__(self, id):
         self.id = id
         self.course_id = None
@@ -27,12 +29,13 @@ class Student_c:
             "status": self.accepted
         }
 
-        
+'''intruduce path of json files'''
 pas_path_stu="save_directory_student/pas.json"
 course_path="main_directory/courses.json"
 pas_path_prof="save_directory_tech/pas.json"
 req_path="main_directory/course_req.json"
 
+'''open json files for use in function'''
 with open(pas_path_stu, "r") as file:
         students = json.load(file)
 with open(pas_path_prof, "r") as file:
@@ -43,12 +46,14 @@ with open(course_path, "r") as file:
 
 
 def id_name_prof(id):
+    '''convert prof id to name professor'''
     for prof in professor:
         if prof["ID"] == id:
             return prof["name"]
     return "unknown"
 
 def pas_enter():
+    '''check password for enter to student panel'''
     while True:
         student_id = input("Type 'x' to exit\nEnter your student ID: ")
         if student_id.lower() == "x":
@@ -68,6 +73,7 @@ def pas_enter():
 
 
 def get_course(student_id):
+    '''student request ending course here'''
     counter=1
     for course in courses:
         if course["capacity"] == course["enrolled"]:
@@ -93,7 +99,6 @@ def get_course(student_id):
             request_l = json.load(file)
     except (FileNotFoundError, json.JSONDecodeError):
         request_l = []
-
     request_l.append(stu.to_dict())
 
     with open(req_path, "w") as file:
@@ -102,6 +107,7 @@ def get_course(student_id):
     
 
 def stu_menu(student_id):
+    '''main menu for student'''
     for student in students:
         if student["student_id"] == student_id:
             print("*** Student Panel ***")
