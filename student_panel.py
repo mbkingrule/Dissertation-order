@@ -26,7 +26,8 @@ class Student_c:
             "req_course": self.course_id,
             "time_req": self.course_req_T,
             "to_prof": self.course_req_P,
-            "status": self.accepted
+            "status": self.accepted,
+            "req_id": (self.id+self.course_id)
         }
 
 '''intruduce path of json files'''
@@ -90,6 +91,7 @@ def get_course(student_id):
               f"units: {course["units"]}\n"
               f"sessions: {course["sessions"]}\n"
               f"resources: {course["resources"]}")
+        counter+=1
     print("select the course you want\nenter the ID course: ")
     selected_course=input()
     stu=Student_c(student_id)

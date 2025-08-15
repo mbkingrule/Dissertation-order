@@ -4,11 +4,11 @@ import student_panel
 
 def tech_panel_call():
     '''go to professor panel'''
-    res= tech_panel.pas_enter()
-    if res == True:
-        tech_panel.prof_menu()
-    if res == False:
-        print("wrong information")
+    tech_id= tech_panel.pas_enter()
+    if tech_id:
+        tech_panel.prof_menu(tech_id)
+    else:
+        print("Exit or login failed.")
         
 def student_panel_call():
     '''go to student panel'''
