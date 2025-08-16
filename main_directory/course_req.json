@@ -1,11 +1,1 @@
-[
-    {
-        "name": "1",
-        "req_course": "C004",
-        "time_req": "2025-08-15 15:35:56.565757",
-        "to_prof": "P001",
-        "status": null,
-        "c_id": "1C004",
-        "req_id": "accepted"
-    }
-]
+[]

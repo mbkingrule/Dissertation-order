@@ -38,11 +38,13 @@ req_path="main_directory/course_req.json"
 
 '''open json files for use in function'''
 with open(pas_path_stu, "r") as file:
-        students = json.load(file)
+    students = json.load(file)
 with open(pas_path_prof, "r") as file:
-        professor = json.load(file)
+    professor = json.load(file)
 with open(course_path, "r") as file:
     courses = json.load(file)
+with open(req_path, "r") as file:
+    requests= json.load(file)
 
 
 
@@ -76,6 +78,13 @@ def pas_enter():
 def get_course(student_id):
     '''student request ending course here'''
     counter=1
+    for req in requests:
+        if student_id == req["name"]:
+            if req["status"] == "accepted" or req["status"] is None:
+                print("\nyou had taken a course\ngo to status page!")
+                return None
+            elif req["status"] == "rejected":
+                continue
     for course in courses:
         if course["capacity"] == course["enrolled"]:
             continue
@@ -105,8 +114,18 @@ def get_course(student_id):
 
     with open(req_path, "w") as file:
         json.dump(request_l, file, indent=4)
+    return None
 
-    
+def get_status(stu_id):
+    with open (req_path, "r") as file:
+        req_l = json.load(file)
+    for req in req_l:
+        if req["name"] == stu_id:
+            if req["status"] != None:
+                print(f"\nyour request is {req["status"]}")
+            else:
+                print("\nyour requst pending contact your prof!")
+    return None
 
 def stu_menu(student_id):
     '''main menu for student'''
@@ -115,9 +134,16 @@ def stu_menu(student_id):
             print("*** Student Panel ***")
             print(f"Name: {student["name"]}")
             break
-    print("1-choose course\n2-choosing status\n3-exit to main")
-    choice= input()
-    if choice == '1':
-        get_course(student_id)
-    elif choice == '3':
-        return None
+    while True:
+        print("\n1-choose course\n2-see status\n3-exit to main")
+        choice= input()
+        if choice == '1':
+            get_course(student_id)
+        elif choice == '2':
+            get_status(student_id)
+        elif choice == '3':
+            break
+    return None
+
+if __name__ == "__main__":
+     print("please run the main program!")
