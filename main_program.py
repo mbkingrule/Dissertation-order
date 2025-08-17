@@ -22,13 +22,13 @@ def student_panel_call():
 def main_menu():
     '''choosing the rool acces'''
     while True:
-        print("""*** main menu ***\nselect your passion\nselect the number\n1-student\n2-teacher\nexit = X""")
+        print("""*** main menu ***\nselect your passion\nselect the number\n1-student\n2-teacher\n3-exit""")
         tar = input()
         if tar == "1":
             student_panel_call()
         elif tar == "2":
             tech_panel_call()
-        elif tar.lower() == "x":
+        elif tar == "3":
             break
         else:
             print("enter a valid number!")

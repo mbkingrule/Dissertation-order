@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 
 class prof:
      def __init__(self, id):
@@ -57,6 +58,7 @@ def stu_req_m(ID):
                choice=input()
                if choice == "a":
                     item["status"]="accepted"
+                    item["time_req"]=str(datetime.now())
                     for tech in teachers:
                          if tech["ID"] == ID:
                               tech["assigned_students"]+=1

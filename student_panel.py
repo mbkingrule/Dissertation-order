@@ -1,5 +1,10 @@
 import json
 from datetime import datetime
+from dateutil.relativedelta import relativedelta
+import tkinter as tk
+from tkinter import filedialog
+import shutil
+import os
 
 def get_prof_c(c_id):
     '''convert course id to professor id'''
@@ -35,6 +40,7 @@ pas_path_stu="save_directory_student/pas.json"
 course_path="main_directory/courses.json"
 pas_path_prof="save_directory_tech/pas.json"
 req_path="main_directory/course_req.json"
+project_path="main_directory/projects_directory"
 
 '''open json files for use in function'''
 with open(pas_path_stu, "r") as file:
@@ -77,6 +83,8 @@ def pas_enter():
 
 def get_course(student_id):
     '''student request ending course here'''
+    with open(req_path, "r") as file:
+        requests= json.load(file)
     counter=1
     for req in requests:
         if student_id == req["name"]:
@@ -103,17 +111,21 @@ def get_course(student_id):
         counter+=1
     print("select the course you want\nenter the ID course: ")
     selected_course=input()
-    stu=Student_c(student_id)
-    stu.enroll_course(selected_course)
-    try:
-        with open(req_path, "r") as file:
-            request_l = json.load(file)
-    except (FileNotFoundError, json.JSONDecodeError):
-        request_l = []
-    request_l.append(stu.to_dict())
+    for course in courses:
+        if course["course_id"] == selected_course: 
+            stu=Student_c(student_id)
+            stu.enroll_course(selected_course)
+            try:
+                with open(req_path, "r") as file:
+                    request_l = json.load(file)
+            except (FileNotFoundError, json.JSONDecodeError):
+                request_l = []
+            request_l.append(stu.to_dict())
 
-    with open(req_path, "w") as file:
-        json.dump(request_l, file, indent=4)
+            with open(req_path, "w") as file:
+                json.dump(request_l, file, indent=4)
+            return None
+    print("course id you entered is invalid")
     return None
 
 def get_status(stu_id):
@@ -127,6 +139,57 @@ def get_status(stu_id):
                 print("\nyour requst pending contact your prof!")
     return None
 
+def passed_time_3m(str_time):
+    time= datetime.strptime(str_time, "%Y-%m-%d %H:%M:%S.%f")
+    now= datetime.now()
+    M3P= time + relativedelta(months=3)
+    if now <= M3P:
+        return True
+    else:
+        return False
+
+def save_pdf(base_name, folder_path):
+    """
+    Save a PDF file from user to a specified folder with a given name.
+    """
+    os.makedirs(folder_path, exist_ok=True)
+    
+    root = tk.Tk()
+    root.withdraw()
+    root.update()  # اجباری برای اینکه پنجره render بشه
+    file_path = filedialog.askopenfilename(
+        title="Select a PDF file",
+        filetypes=[("PDF files", "*.pdf")]
+    )
+    root.destroy()
+
+    if file_path:
+        destination = os.path.join(folder_path, base_name)
+        shutil.copy(file_path, destination)
+        return destination
+    return None
+
+
+def course_actions(student_id):
+    with open(req_path, "r") as file:
+      requests= json.load(file)
+    for req in requests:
+        if req["name"] == student_id:
+            if req["status"]=="accepted":
+                if passed_time_3m(req["time_req"]):
+                    print("you can upload your project")
+                    saved_path = save_pdf(student_id, project_path)
+                    if saved_path:
+                        print(f"File saved to {saved_path}")
+                    else:
+                        print("No file selected")
+                else:
+                    print("three months didn't pass after your req")
+            else:
+                print("Your request has not been accepted yet!")
+    return None
+    
+
 def stu_menu(student_id):
     '''main menu for student'''
     for student in students:
@@ -135,13 +198,15 @@ def stu_menu(student_id):
             print(f"Name: {student["name"]}")
             break
     while True:
-        print("\n1-choose course\n2-see status\n3-exit to main")
+        print("\n1-choose course\n2-see status\n3-course actions\n4-exit to main")
         choice= input()
         if choice == '1':
             get_course(student_id)
         elif choice == '2':
             get_status(student_id)
         elif choice == '3':
+            course_actions(student_id)
+        elif choice == '4':
             break
     return None
 

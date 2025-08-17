@@ -5,7 +5,7 @@
         "professor_id": "123456",
         "password": "123456",
         "supervisor_slot": 5,
-        "assigned_students": 0
+        "assigned_students": 2
     },
     {
         "name": "Dr. Moradi",
