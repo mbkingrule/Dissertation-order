@@ -9,8 +9,8 @@ import os
 def get_prof_c(c_id):
     '''convert course id to professor id'''
     for course in courses:
-        course["course_id"] == c_id
-        return course["professor_id"]
+        if course["course_id"] == c_id: 
+            return course["professor_id"]
     
 class Student_c:
     '''make class for student and request method'''
@@ -139,6 +139,14 @@ def get_status(stu_id):
                 print("\nyour requst pending contact your prof!")
     return None
 
+def check_student_file(student_id):
+    """
+    Check if a PDF file with the student ID exists in the given folder.
+    """
+    filename = student_id + ".pdf"
+    file_path = os.path.join(project_path, filename)
+    return os.path.isfile(file_path)
+
 def passed_time_3m(str_time):
     time= datetime.strptime(str_time, "%Y-%m-%d %H:%M:%S.%f")
     now= datetime.now()
@@ -153,18 +161,18 @@ def save_pdf(base_name, folder_path):
     Save a PDF file from user to a specified folder with a given name.
     """
     os.makedirs(folder_path, exist_ok=True)
-    
+
     root = tk.Tk()
-    root.withdraw()
-    root.update()  # اجباری برای اینکه پنجره render بشه
+    root.withdraw()  # hide the main Tk window
     file_path = filedialog.askopenfilename(
         title="Select a PDF file",
         filetypes=[("PDF files", "*.pdf")]
     )
-    root.destroy()
+    root.destroy()  # close Tk instance completely
 
     if file_path:
-        destination = os.path.join(folder_path, base_name)
+        ext = os.path.splitext(file_path)[1]  # get original extension (.pdf)
+        destination = os.path.join(folder_path, base_name + ext)
         shutil.copy(file_path, destination)
         return destination
     return None
@@ -177,12 +185,15 @@ def course_actions(student_id):
         if req["name"] == student_id:
             if req["status"]=="accepted":
                 if passed_time_3m(req["time_req"]):
-                    print("you can upload your project")
-                    saved_path = save_pdf(student_id, project_path)
-                    if saved_path:
-                        print(f"File saved to {saved_path}")
+                    if check_student_file(student_id) == False:
+                        print("you can upload your project")
+                        saved_path = save_pdf(student_id, project_path)
+                        if saved_path:
+                            print(f"File saved to {saved_path}")
+                        else:
+                            print("No file selected")
                     else:
-                        print("No file selected")
+                        print("you uploaded your project")
                 else:
                     print("three months didn't pass after your req")
             else:
