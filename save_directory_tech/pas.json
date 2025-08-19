@@ -4,15 +4,13 @@
         "ID": "P001",
         "professor_id": "123456",
         "password": "123456",
-        "supervisor_slot": 5,
-        "assigned_students": 2
+        "assigned_students": 5
     },
     {
         "name": "Dr. Moradi",
         "ID": "P002",
         "professor_id": "234567",
         "password": "M9o8r7@#",
-        "supervisor_slot": 5,
         "assigned_students": 0
     },
     {
@@ -20,7 +18,6 @@
         "ID": "P003",
         "professor_id": "345678",
         "password": "S5h6a7$%",
-        "supervisor_slot": 5,
         "assigned_students": 0
     },
     {
@@ -28,7 +25,6 @@
         "ID": "P004",
         "professor_id": "456789",
         "password": "K3h4d5&*",
-        "supervisor_slot": 5,
         "assigned_students": 0
     },
     {
@@ -36,7 +32,6 @@
         "ID": "P005",
         "professor_id": "1",
         "password": "a",
-        "supervisor_slot": 5,
         "assigned_students": 0
     }
 ]

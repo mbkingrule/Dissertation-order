@@ -32,7 +32,8 @@ class Student_c:
             "time_req": self.course_req_T,
             "to_prof": self.course_req_P,
             "status": self.accepted,
-            "req_id": (self.id+self.course_id)
+            "req_id": (self.id+self.course_id),
+            "upload_status": None
         }
 
 '''intruduce path of json files'''
@@ -151,7 +152,7 @@ def passed_time_3m(str_time):
     time= datetime.strptime(str_time, "%Y-%m-%d %H:%M:%S.%f")
     now= datetime.now()
     M3P= time + relativedelta(months=3)
-    if now <= M3P:
+    if now >= M3P:
         return True
     else:
         return False
@@ -188,6 +189,7 @@ def course_actions(student_id):
                     if check_student_file(student_id) == False:
                         print("you can upload your project")
                         saved_path = save_pdf(student_id, project_path)
+                        req["upload_status"]=True
                         if saved_path:
                             print(f"File saved to {saved_path}")
                         else:
@@ -198,6 +200,8 @@ def course_actions(student_id):
                     print("three months didn't pass after your req")
             else:
                 print("Your request has not been accepted yet!")
+    with open(req_path, "w") as f:
+        json.dump(requests, f, indent=4)
     return None
     
 
