@@ -4,34 +4,39 @@
         "ID": "P001",
         "professor_id": "123456",
         "password": "123456",
-        "assigned_students": 5
+        "assigned_students": 1,
+        "assigned_refer": 0
     },
     {
         "name": "Dr. Moradi",
         "ID": "P002",
         "professor_id": "234567",
         "password": "M9o8r7@#",
-        "assigned_students": 0
+        "assigned_students": 0,
+        "assigned_refer": 0
     },
     {
         "name": "Dr. Sharifi",
         "ID": "P003",
         "professor_id": "345678",
         "password": "S5h6a7$%",
-        "assigned_students": 0
+        "assigned_students": 0,
+        "assigned_refer": 0
     },
     {
         "name": "Dr. Khademi",
         "ID": "P004",
         "professor_id": "456789",
         "password": "K3h4d5&*",
-        "assigned_students": 0
+        "assigned_students": 0,
+        "assigned_refer": 0
     },
     {
         "name": "dr test",
         "ID": "P005",
         "professor_id": "1",
         "password": "a",
-        "assigned_students": 0
+        "assigned_students": 0,
+        "assigned_refer": 0
     }
 ]

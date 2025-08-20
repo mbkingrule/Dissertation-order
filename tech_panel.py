@@ -1,23 +1,14 @@
 import json
 from datetime import datetime
 import os
-
-
-class prof:
-     def __init__(self, id):
-          self.id= id
-          self.course=[]
-          self.c_prof= None
-          self.c_refree= None
-          self.c_get= []
-          self.ref_get = []
-     def add_course(self, c_id):
-          pass
+import tkinter as tk
+from tkcalendar import Calendar
 
 pas_path="save_directory_tech/pas.json"
 stu_pas_path="save_directory_student/pas.json"
 req_path="main_directory/course_req.json"
 project_path="main_directory/projects_directory"
+present_path="main_directory/presents.json"
 
 with open(stu_pas_path, "r") as file:
      student= json.load(file)
@@ -25,6 +16,84 @@ with open(req_path, "r") as file:
      requests = json.load(file)
 with open(pas_path, "r") as file:
      teachers = json.load(file)
+
+class DefenseSession:
+    def __init__(self, request_id, student_id, supervisor):
+        self.request_id = request_id
+        self.student_id = student_id
+        self.date = None
+        self.supervisor = supervisor
+        self.internal_examiner = None
+        self.external_examiner = None
+        self.scores = {
+            "supervisor": None,
+            "internal_examiner": None,
+            "external_examiner": None
+        }
+
+    def set_date(self, date):
+        self.date = date
+
+    def set_examiner(self, int_ex, ext_ex):
+         self.internal_examiner = int_ex
+         self.external_examiner = ext_ex
+        
+    def set_score(self, role, score):
+        """ثبت نمره یک نقش (۰ تا ۲۰)"""
+        if role in self.scores:
+            if 0 <= score <= 20:
+                self.scores[role] = score
+            else:
+                print("Score must be between 0 and 20.")
+        else:
+            print("Invalid role.")
+
+
+    def save_to_json(self):
+        """ذخیره اطلاعات در فایل JSON"""
+        data = {
+            "request_id": self.request_id,
+            "student_id": self.student_id,
+            "date": self.date,
+            "supervisor": self.supervisor,
+            "internal_examiner": self.internal_examiner,
+            "external_examiner": self.external_examiner,
+            "scores": self.scores
+        }
+        with open(present_path, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=4)
+        print(f"Defense session saved to {present_path}")
+
+    def __str__(self):
+        return (
+            f"Request ID: {self.request_id}\n"
+            f"Student ID: {self.student_id}\n"
+            f"Date: {self.date}\n"
+            f"Supervisor: {self.supervisor}, Score: {self.scores['supervisor']}\n"
+            f"Internal Examiner: {self.internal_examiner}, Score: {self.scores['internal_examiner']}\n"
+            f"External Examiner: {self.external_examiner}, Score: {self.scores['external_examiner']}\n"
+            f"Total Score: {self.get_total_score()}"
+        )
+
+def get_date_from_user():
+    """نمایش تقویم برای انتخاب تاریخ و برگرداندن آن به صورت str"""
+    selected_date = {"value": None}  # استفاده از دیکشنری برای تغییر درون تابع داخلی
+
+    def on_select():
+        selected_date["value"] = cal.get_date()
+        root.destroy()  # بستن پنجره
+
+    root = tk.Tk()
+    root.title("Select a Date")
+
+    cal = Calendar(root, selectmode="day", date_pattern="yyyy-mm-dd")
+    cal.pack(pady=10)
+
+    tk.Button(root, text="Select", command=on_select).pack(pady=5)
+
+    root.mainloop()
+    return selected_date["value"]
+
 
 def read_req():
      for req in requests:
@@ -111,6 +180,7 @@ def my_course(ID):
      tar_1=input("enter the request id for actions")
      for req in requests:
           if req["req_id"] == tar_1:
+               session = DefenseSession(req["req_id"], req["name"], req["to_prof"])
                print(f"*** action menu ***\n"
                      f"request from {stu_to_name(req["name"])}\n")
                while True:
@@ -119,11 +189,24 @@ def my_course(ID):
                     if tar_2 == "1":
                          open_pdf_by_name(req["name"])
                     elif tar_2 == "2":
-                         pass
+                         time=get_date_from_user()
+                         session.set_date(time)
                     elif tar_2 == "3":
-                         pass
+                         for prof in teachers:
+                              if prof["ID"] != ID:
+                                   if prof["assigned_refer"] <=10:
+                                        print(f"name: {prof["name"]}\n"
+                                              f"ID: {prof["ID"]}\n"
+                                              f"remainig slot: {10 - prof["assigned_refer"]}")
+                         examiner1= input("enter the  int examiner ID: ")
+                         examiner2= input("enter the  ext examiner ID: ")
+                         session.set_examiner(examiner1, examiner2)
+                         session.save_to_json()
+                         break
                     elif tar_2 == "4":
                          break
+          break
+     session.save_to_json()
 def prof_menu(id):
      print("\n*** techers panel ***")
      for prof in teachers:

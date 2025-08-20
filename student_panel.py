@@ -33,7 +33,9 @@ class Student_c:
             "to_prof": self.course_req_P,
             "status": self.accepted,
             "req_id": (self.id+self.course_id),
-            "upload_status": None
+            "upload_status": None,
+            "project_status": None,
+            "present_date": None
         }
 
 '''intruduce path of json files'''
@@ -42,6 +44,8 @@ course_path="main_directory/courses.json"
 pas_path_prof="save_directory_tech/pas.json"
 req_path="main_directory/course_req.json"
 project_path="main_directory/projects_directory"
+present_path="main_directory/presents.json"
+
 
 '''open json files for use in function'''
 with open(pas_path_stu, "r") as file:
@@ -178,8 +182,7 @@ def save_pdf(base_name, folder_path):
         return destination
     return None
 
-
-def course_actions(student_id):
+def upload_pdf(student_id):
     with open(req_path, "r") as file:
       requests= json.load(file)
     for req in requests:
@@ -203,6 +206,31 @@ def course_actions(student_id):
     with open(req_path, "w") as f:
         json.dump(requests, f, indent=4)
     return None
+
+
+def course_actions(student_id):
+    with open(req_path, "r") as file:
+      requests= json.load(file)
+    for req in requests:
+        if req["name"] == student_id:
+            if req["status"]=="accepted":
+                print("\n*** course action menu ***\n")
+                while True:
+                    tar=input("1-upload pdf\n2-project status\n3-present stauts and info"
+                              "4-exit")
+                    if tar == "1":
+                        upload_pdf(student_id)
+                    elif tar == "2":
+                        pass
+                    elif tar == "3":
+                        pass
+                    elif tar == "4":
+                        break
+            else:
+                print("Your request has not been accepted yet!")
+    return None
+
+
     
 
 def stu_menu(student_id):
