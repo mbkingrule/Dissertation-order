@@ -6,47 +6,52 @@ from tkinter import filedialog
 import shutil
 import os
 
+
 def get_prof_c(c_id):
-    '''convert course id to professor id'''
+    """convert course id to professor id"""
     for course in courses:
-        if course["course_id"] == c_id: 
+        if course["course_id"] == c_id:
             return course["professor_id"]
-    
+
+
 class Student_c:
-    '''make class for student and request method'''
+    """make class for student and request method"""
+
     def __init__(self, id):
         self.id = id
         self.course_id = None
-        self.course_req_T= None
-        self.course_req_P= None
-        self.accepted= None
+        self.course_req_T = None
+        self.course_req_P = None
+        self.accepted = None
 
     def enroll_course(self, course_id):
         self.course_id = course_id
         self.course_req_T = str(datetime.now())
         self.course_req_P = get_prof_c(course_id)
+
     def to_dict(self):
-        return{
+        return {
             "name": self.id,
             "req_course": self.course_id,
             "time_req": self.course_req_T,
             "to_prof": self.course_req_P,
             "status": self.accepted,
-            "req_id": (self.id+self.course_id),
+            "req_id": (self.id + self.course_id),
             "upload_status": None,
             "project_status": None,
         }
 
-'''intruduce path of json files'''
-pas_path_stu="save_directory_student/pas.json"
-course_path="main_directory/courses.json"
-pas_path_prof="save_directory_tech/pas.json"
-req_path="main_directory/course_req.json"
-project_path="main_directory/projects_directory"
-present_path="main_directory/presents.json"
+
+"""intruduce path of json files"""
+pas_path_stu = "save_directory_student/pas.json"
+course_path = "main_directory/courses.json"
+pas_path_prof = "save_directory_tech/pas.json"
+req_path = "main_directory/course_req.json"
+project_path = "main_directory/projects_directory"
+present_path = "main_directory/presents.json"
 
 
-'''open json files for use in function'''
+"""open json files for use in function"""
 with open(pas_path_stu, "r") as file:
     students = json.load(file)
 with open(pas_path_prof, "r") as file:
@@ -54,21 +59,21 @@ with open(pas_path_prof, "r") as file:
 with open(course_path, "r") as file:
     courses = json.load(file)
 with open(req_path, "r") as file:
-    requests= json.load(file)
+    requests = json.load(file)
 with open(present_path, "r") as file:
     presents = json.load(file)
 
 
-
 def id_name_prof(id):
-    '''convert prof id to name professor'''
+    """convert prof id to name professor"""
     for prof in professor:
         if prof["ID"] == id:
             return prof["name"]
     return "unknown"
 
+
 def pas_enter():
-    '''check password for enter to student panel'''
+    """check password for enter to student panel"""
     while True:
         student_id = input("Type 'x' to exit\nEnter your student ID: ")
         if student_id.lower() == "x":
@@ -88,10 +93,10 @@ def pas_enter():
 
 
 def get_course(student_id):
-    '''student request ending course here'''
+    """student request ending course here"""
     with open(req_path, "r") as file:
-        requests= json.load(file)
-    counter=1
+        requests = json.load(file)
+    counter = 1
     for req in requests:
         if student_id == req["name"]:
             if req["status"] == "accepted" or req["status"] is None:
@@ -103,23 +108,25 @@ def get_course(student_id):
         if course["capacity"] == course["enrolled"]:
             continue
         print("\n")
-        print(f"{counter}course\n"
-              f"course ID: {course["course_id"]}\n"
-              f"title: {course["title"]}\n"
-              f"professor: {id_name_prof(course['professor_id'])}\n"
-              f"year: {course["year"]}\n"
-              f"semester: {course["semester"]}\n"
-              f"capacity: {course["capacity"]}\n"
-              f"enrolled: {course["enrolled"]}\n"
-              f"units: {course["units"]}\n"
-              f"sessions: {course["sessions"]}\n"
-              f"resources: {course["resources"]}")
-        counter+=1
+        print(
+            f"{counter}course\n"
+            f"course ID: {course["course_id"]}\n"
+            f"title: {course["title"]}\n"
+            f"professor: {id_name_prof(course['professor_id'])}\n"
+            f"year: {course["year"]}\n"
+            f"semester: {course["semester"]}\n"
+            f"capacity: {course["capacity"]}\n"
+            f"enrolled: {course["enrolled"]}\n"
+            f"units: {course["units"]}\n"
+            f"sessions: {course["sessions"]}\n"
+            f"resources: {course["resources"]}"
+        )
+        counter += 1
     print("select the course you want\nenter the ID course: ")
-    selected_course=input()
+    selected_course = input()
     for course in courses:
-        if course["course_id"] == selected_course: 
-            stu=Student_c(student_id)
+        if course["course_id"] == selected_course:
+            stu = Student_c(student_id)
             stu.enroll_course(selected_course)
             try:
                 with open(req_path, "r") as file:
@@ -134,8 +141,9 @@ def get_course(student_id):
     print("course id you entered is invalid")
     return None
 
+
 def get_status(stu_id):
-    with open (req_path, "r") as file:
+    with open(req_path, "r") as file:
         req_l = json.load(file)
     for req in req_l:
         if req["name"] == stu_id:
@@ -145,6 +153,7 @@ def get_status(stu_id):
                 print("\nyour requst pending contact your prof!")
     return None
 
+
 def check_student_file(student_id):
     """
     Check if a PDF file with the student ID exists in the given folder.
@@ -153,14 +162,16 @@ def check_student_file(student_id):
     file_path = os.path.join(project_path, filename)
     return os.path.isfile(file_path)
 
+
 def passed_time_3m(str_time):
-    time= datetime.strptime(str_time, "%Y-%m-%d %H:%M:%S.%f")
-    now= datetime.now()
-    M3P= time + relativedelta(months=3)
+    time = datetime.strptime(str_time, "%Y-%m-%d %H:%M:%S.%f")
+    now = datetime.now()
+    M3P = time + relativedelta(months=3)
     if now >= M3P:
         return True
     else:
         return False
+
 
 def save_pdf(base_name, folder_path):
     """
@@ -169,31 +180,31 @@ def save_pdf(base_name, folder_path):
     os.makedirs(folder_path, exist_ok=True)
 
     root = tk.Tk()
-    root.withdraw()  # hide the main Tk window
+    root.withdraw()  
     file_path = filedialog.askopenfilename(
-        title="Select a PDF file",
-        filetypes=[("PDF files", "*.pdf")]
+        title="Select a PDF file", filetypes=[("PDF files", "*.pdf")]
     )
-    root.destroy()  # close Tk instance completely
+    root.destroy() 
 
     if file_path:
-        ext = os.path.splitext(file_path)[1]  # get original extension (.pdf)
+        ext = os.path.splitext(file_path)[1]  
         destination = os.path.join(folder_path, base_name + ext)
         shutil.copy(file_path, destination)
         return destination
     return None
 
+
 def upload_pdf(student_id):
     with open(req_path, "r") as file:
-      requests= json.load(file)
+        requests = json.load(file)
     for req in requests:
         if req["name"] == student_id:
-            if req["status"]=="accepted":
+            if req["status"] == "accepted":
                 if passed_time_3m(req["time_req"]):
                     if check_student_file(student_id) == False:
                         print("you can upload your project")
                         saved_path = save_pdf(student_id, project_path)
-                        req["upload_status"]=True
+                        req["upload_status"] = True
                         if saved_path:
                             print(f"File saved to {saved_path}")
                         else:
@@ -208,26 +219,29 @@ def upload_pdf(student_id):
         json.dump(requests, f, indent=4)
     return None
 
+
 def present_status(student_id):
     for proj in presents:
         if proj["student_id"] == str(student_id):
             if proj["date"] is not None:
-                print(f"\nyour request had accepted\n"
-                      f"at {proj["date"]} you shold present your project\n"
-                      f"your supervisor: {id_name_prof(proj["supervisor"])}\n"
-                      f"internal examiner: {id_name_prof(proj["internal_examiner"])}\n"
-                      f"external examiner: {id_name_prof(proj["external_examiner"])}")
-    
+                print(
+                    f"\nyour request had accepted\n"
+                    f"at {proj["date"]} you shold present your project\n"
+                    f"your supervisor: {id_name_prof(proj["supervisor"])}\n"
+                    f"internal examiner: {id_name_prof(proj["internal_examiner"])}\n"
+                    f"external examiner: {id_name_prof(proj["external_examiner"])}"
+                )
+
+
 def course_actions(student_id):
     with open(req_path, "r") as file:
-      requests= json.load(file)
+        requests = json.load(file)
     for req in requests:
         if req["name"] == student_id:
-            if req["status"]=="accepted":
+            if req["status"] == "accepted":
                 print("\n*** course action menu ***\n")
                 while True:
-                    tar=input("1-upload pdf\n2-present stauts and info"
-                              "4-exit")
+                    tar = input("1-upload pdf\n2-present stauts and info" "4-exit")
                     if tar == "1":
                         upload_pdf(student_id)
                     elif tar == "2":
@@ -239,10 +253,8 @@ def course_actions(student_id):
     return None
 
 
-    
-
 def stu_menu(student_id):
-    '''main menu for student'''
+    """main menu for student"""
     for student in students:
         if student["student_id"] == student_id:
             print("*** Student Panel ***")
@@ -250,16 +262,17 @@ def stu_menu(student_id):
             break
     while True:
         print("\n1-choose course\n2-see status\n3-course actions\n4-exit to main")
-        choice= input()
-        if choice == '1':
+        choice = input()
+        if choice == "1":
             get_course(student_id)
-        elif choice == '2':
+        elif choice == "2":
             get_status(student_id)
-        elif choice == '3':
+        elif choice == "3":
             course_actions(student_id)
-        elif choice == '4':
+        elif choice == "4":
             break
     return None
 
+
 if __name__ == "__main__":
-     print("please run the main program!")
+    print("please run the main program!")
