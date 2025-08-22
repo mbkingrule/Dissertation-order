@@ -16,6 +16,9 @@ with open(req_path, "r") as file:
      requests = json.load(file)
 with open(pas_path, "r") as file:
      teachers = json.load(file)
+with open(present_path, "r") as file:
+    presents = json.load(file)
+
 
 class DefenseSession:
     def __init__(self, request_id, student_id, supervisor):
@@ -38,31 +41,37 @@ class DefenseSession:
          self.internal_examiner = int_ex
          self.external_examiner = ext_ex
         
-    def set_score(self, role, score):
-        """ثبت نمره یک نقش (۰ تا ۲۰)"""
-        if role in self.scores:
-            if 0 <= score <= 20:
-                self.scores[role] = score
-            else:
-                print("Score must be between 0 and 20.")
-        else:
-            print("Invalid role.")
-
-
     def save_to_json(self):
-        """ذخیره اطلاعات در فایل JSON"""
-        data = {
-            "request_id": self.request_id,
-            "student_id": self.student_id,
-            "date": self.date,
-            "supervisor": self.supervisor,
-            "internal_examiner": self.internal_examiner,
-            "external_examiner": self.external_examiner,
-            "scores": self.scores
-        }
-        with open(present_path, "w", encoding="utf-8") as f:
-            json.dump(data, f, ensure_ascii=False, indent=4)
-        print(f"Defense session saved to {present_path}")
+     data = {
+        "request_id": self.request_id,
+        "student_id": self.student_id,
+        "date": self.date,
+        "supervisor": self.supervisor,
+        "internal_examiner": self.internal_examiner,
+        "external_examiner": self.external_examiner,
+        "scores": self.scores
+     }
+
+     # اگه فایل وجود داره، بخونش
+     if os.path.exists(present_path):
+        with open(present_path, "r", encoding="utf-8") as f:
+            try:
+                presents = json.load(f)
+                if not isinstance(presents, list):  # اگه لیست نبود
+                    presents = []
+            except json.JSONDecodeError:
+                presents = []
+     else:
+        presents = []
+
+    # اضافه کردن دیکشنری جدید به لیست
+     presents.append(data)
+
+    # ذخیره لیست به فایل
+     with open(present_path, "w", encoding="utf-8") as f:
+        json.dump(presents, f, ensure_ascii=False, indent=4)
+
+     print(f"Defense session saved to {present_path}")
 
     def __str__(self):
         return (
@@ -94,6 +103,12 @@ def get_date_from_user():
     root.mainloop()
     return selected_date["value"]
 
+def id_name_prof(id):
+    '''convert prof id to name professor'''
+    for prof in teachers:
+        if prof["ID"] == id:
+            return prof["name"]
+    return "unknown"
 
 def read_req():
      for req in requests:
@@ -161,6 +176,36 @@ def open_pdf_by_name(search_name):
             return
     print("No matching PDF found.")
 
+def set_score_sup(request_id):
+     tar= request_id
+     for proj in presents:
+          if proj["request_id"] == tar:
+               sco= input("enter your score as a number")
+               sco = int(sco)
+               proj["scores"]["supervisor"] = sco
+     with open(present_path, "w") as f:
+          json.dump(presents, f, indent=4)
+
+def set_score_exm(ID):
+     for proj in presents:
+          if proj["internal_examiner"] == ID or proj["external_examiner"] == ID:
+               print(f"student id: {stu_to_name(proj["student_id"])}\n"
+                     f"request id: {proj["request_id"]}\n"
+                     f"supervisor: {id_name_prof(proj["supervisor"])}")
+     print("select the request id you want to score it")
+     tar= input()
+     for proj in presents:
+          if proj["request_id"] == tar:
+               if proj["internal_examiner"] == ID:
+                    sco= input("enter your score as a number")
+                    sco = int(sco)
+                    proj["scores"]["internal_examiner"] = sco
+               elif proj["external_examiner"] == ID:
+                    sco= input("enter your score as a number")
+                    sco = int(sco)
+                    proj["scores"]["external_examiner"] = sco
+     with open(present_path, "w") as f:
+          json.dump(presents, f, indent=4)
 
 def my_course(ID):
      for req in requests:
@@ -185,7 +230,7 @@ def my_course(ID):
                      f"request from {stu_to_name(req["name"])}\n")
                while True:
                     tar_2=input(f"1-open project file\n2-select time to present\n"
-                                f"3-select refeeri\n4-exit")
+                                f"3-select refeeri\n4-set score\n5-exit\n")
                     if tar_2 == "1":
                          open_pdf_by_name(req["name"])
                     elif tar_2 == "2":
@@ -204,9 +249,10 @@ def my_course(ID):
                          session.save_to_json()
                          break
                     elif tar_2 == "4":
+                         set_score_sup(req["req_id"])
+                    elif tar_2 == "5":
                          break
           break
-     session.save_to_json()
 def prof_menu(id):
      print("\n*** techers panel ***")
      for prof in teachers:
@@ -216,7 +262,7 @@ def prof_menu(id):
      print("choose and enter the number")
     
      while True:
-          choice=input("1-guide prof\n2-referee prof\n3-courses action\n4-exit\n")
+          choice=input("1-guide prof\n2-referee prof\n3-courses action\n4-set score\n5-exit\n")
           if choice == "1":
                stu_req_m(id_3)
           elif choice == "2":
@@ -224,6 +270,8 @@ def prof_menu(id):
           elif choice == "3":
                my_course(id_3)
           elif choice =="4":
+               set_score_exm(id_3)
+          elif choice == "5":
                break
      return None
      

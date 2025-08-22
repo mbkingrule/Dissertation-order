@@ -1,1 +1,15 @@
-[]
+[
+    {
+        "request_id": "1C004",
+        "student_id": "1",
+        "date": "2025-08-26",
+        "supervisor": "P001",
+        "internal_examiner": "P005",
+        "external_examiner": "P004",
+        "scores": {
+            "supervisor": 12,
+            "internal_examiner": 18,
+            "external_examiner": 20
+        }
+    }
+]

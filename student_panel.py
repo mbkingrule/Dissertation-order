@@ -35,7 +35,6 @@ class Student_c:
             "req_id": (self.id+self.course_id),
             "upload_status": None,
             "project_status": None,
-            "present_date": None
         }
 
 '''intruduce path of json files'''
@@ -56,6 +55,8 @@ with open(course_path, "r") as file:
     courses = json.load(file)
 with open(req_path, "r") as file:
     requests= json.load(file)
+with open(present_path, "r") as file:
+    presents = json.load(file)
 
 
 
@@ -207,7 +208,16 @@ def upload_pdf(student_id):
         json.dump(requests, f, indent=4)
     return None
 
-
+def present_status(student_id):
+    for proj in presents:
+        if proj["student_id"] == str(student_id):
+            if proj["date"] is not None:
+                print(f"\nyour request had accepted\n"
+                      f"at {proj["date"]} you shold present your project\n"
+                      f"your supervisor: {id_name_prof(proj["supervisor"])}\n"
+                      f"internal examiner: {id_name_prof(proj["internal_examiner"])}\n"
+                      f"external examiner: {id_name_prof(proj["external_examiner"])}")
+    
 def course_actions(student_id):
     with open(req_path, "r") as file:
       requests= json.load(file)
@@ -216,14 +226,12 @@ def course_actions(student_id):
             if req["status"]=="accepted":
                 print("\n*** course action menu ***\n")
                 while True:
-                    tar=input("1-upload pdf\n2-project status\n3-present stauts and info"
+                    tar=input("1-upload pdf\n2-present stauts and info"
                               "4-exit")
                     if tar == "1":
                         upload_pdf(student_id)
                     elif tar == "2":
-                        pass
-                    elif tar == "3":
-                        pass
+                        present_status(student_id)
                     elif tar == "4":
                         break
             else:
