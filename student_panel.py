@@ -143,6 +143,7 @@ def get_course(student_id):
 
 
 def get_status(stu_id):
+    '''student can see request status'''
     with open(req_path, "r") as file:
         req_l = json.load(file)
     for req in req_l:
@@ -155,15 +156,14 @@ def get_status(stu_id):
 
 
 def check_student_file(student_id):
-    """
-    Check if a PDF file with the student ID exists in the given folder.
-    """
+    '''Check if a PDF file with the student ID exists in the given folder'''
     filename = student_id + ".pdf"
     file_path = os.path.join(project_path, filename)
     return os.path.isfile(file_path)
 
 
 def passed_time_3m(str_time):
+    '''check three month pass for upload project'''
     time = datetime.strptime(str_time, "%Y-%m-%d %H:%M:%S.%f")
     now = datetime.now()
     M3P = time + relativedelta(months=3)
@@ -174,9 +174,7 @@ def passed_time_3m(str_time):
 
 
 def save_pdf(base_name, folder_path):
-    """
-    Save a PDF file from user to a specified folder with a given name.
-    """
+    '''Save a PDF file from user to a specified folder with a given name'''
     os.makedirs(folder_path, exist_ok=True)
 
     root = tk.Tk()
@@ -195,6 +193,7 @@ def save_pdf(base_name, folder_path):
 
 
 def upload_pdf(student_id):
+    '''upload pdf project file'''
     with open(req_path, "r") as file:
         requests = json.load(file)
     for req in requests:
@@ -221,6 +220,7 @@ def upload_pdf(student_id):
 
 
 def present_status(student_id):
+    '''student can check that project file accepted or not'''
     for proj in presents:
         if proj["student_id"] == str(student_id):
             if proj["date"] is not None:
@@ -231,9 +231,12 @@ def present_status(student_id):
                     f"internal examiner: {id_name_prof(proj["internal_examiner"])}\n"
                     f"external examiner: {id_name_prof(proj["external_examiner"])}"
                 )
+            else:
+                print("your project not have been accepted")
 
 
 def course_actions(student_id):
+    '''student can upload and see defence session status'''
     with open(req_path, "r") as file:
         requests = json.load(file)
     for req in requests:

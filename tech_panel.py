@@ -4,12 +4,14 @@ import os
 import tkinter as tk
 from tkcalendar import Calendar
 
+'''path json and pdf directory'''
 pas_path = "save_directory_tech/pas.json"
 stu_pas_path = "save_directory_student/pas.json"
 req_path = "main_directory/course_req.json"
 project_path = "main_directory/projects_directory"
 present_path = "main_directory/presents.json"
 
+'''open json files to use'''
 with open(stu_pas_path, "r") as file:
     student = json.load(file)
 with open(req_path, "r") as file:
@@ -21,6 +23,7 @@ with open(present_path, "r") as file:
 
 
 class DefenseSession:
+    '''class for saving defense present'''
     def __init__(self, request_id, student_id, supervisor):
         self.request_id = request_id
         self.student_id = student_id
@@ -83,6 +86,7 @@ class DefenseSession:
 
 
 def get_date_from_user():
+    '''defense date select by supervisor'''
     selected_date = {"value": None}  
 
     def on_select():
@@ -100,27 +104,27 @@ def get_date_from_user():
     root.mainloop()
     return selected_date["value"]
 
-
 def id_name_prof(id):
+    '''convert ID to professor name'''
     """convert prof id to name professor"""
     for prof in teachers:
         if prof["ID"] == id:
             return prof["name"]
     return "unknown"
 
-
 def read_req():
+    '''read requests step by step'''
     for req in requests:
         yield req
 
-
 def stu_to_name(id):
+    '''convert student id to name'''
     for stu in student:
         if id == stu["student_id"]:
             return stu["name"]
 
-
 def stu_req_m(ID):
+    '''see student request for accept or refuse'''
     for tech in teachers:
         if ID == tech["ID"]:
             if tech["assigned_students"] >= 5:
@@ -172,6 +176,7 @@ def stu_req_m(ID):
 
 
 def open_pdf_by_name(search_name):
+    '''open project file for supervisor'''
     for filename in os.listdir(project_path):
         if (
             filename.lower().endswith(".pdf")
@@ -185,6 +190,7 @@ def open_pdf_by_name(search_name):
 
 
 def set_score_sup(request_id):
+    '''supervisor set score for student'''
     tar = request_id
     for proj in presents:
         if proj["request_id"] == tar:
@@ -196,6 +202,7 @@ def set_score_sup(request_id):
 
 
 def set_score_exm(ID):
+    '''examiner can save score'''
     for proj in presents:
         if proj["internal_examiner"] == ID or proj["external_examiner"] == ID:
             print(
@@ -220,6 +227,7 @@ def set_score_exm(ID):
 
 
 def my_course(ID):
+    '''professor can see taken courses'''
     for req in requests:
         if req["to_prof"] == ID and req["status"] == "accepted":
             if req["upload_status"] == True:
@@ -271,8 +279,8 @@ def my_course(ID):
                     break
         break
 
-
 def prof_menu(id):
+    '''professor enterance menu'''
     print("\n*** techers panel ***")
     for prof in teachers:
         if prof["professor_id"] == id:
@@ -296,8 +304,8 @@ def prof_menu(id):
             break
     return None
 
-
 def pas_enter():
+    '''password login for professors'''
     id = input("exit = x\nenter your teaching ID: ")
     if id.lower() == "x":
         return None
@@ -313,7 +321,6 @@ def pas_enter():
                 pas_enter()
     else:
         print("teacher ID not found please try again")
-
 
 if __name__ == "__main__":
     print("please run the main program!")

@@ -2,6 +2,7 @@
 
 import tech_panel
 import student_panel
+from lib import menu
 
 
 def tech_panel_call():
@@ -23,11 +24,11 @@ def student_panel_call():
 
 
 def main_menu():
-    """choosing the rool acces"""
+    """choosing the rool access"""
     while True:
         print(
             "*** main menu ***\nselect your passion\n"
-            "select the number\n1-student\n2-teacher\n3-exit"
+            "select the number\n1-student\n2-teacher\n3-library\n4-exit"
         )
         tar = input()
         if tar == "1":
@@ -35,6 +36,8 @@ def main_menu():
         elif tar == "2":
             tech_panel_call()
         elif tar == "3":
+            menu()
+        elif tar == "4":
             break
         else:
             print("enter a valid number!")

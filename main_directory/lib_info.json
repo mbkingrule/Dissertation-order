@@ -1,0 +1,38 @@
+[
+    {
+        "subject": "Data Analysis for Thesis",
+        "writer": "1",
+        "year": 1404,
+        "semester": "Second",
+        "examiners": [
+            "P005",
+            "P004"
+        ],
+        "supervisor": "P001",
+        "score": 16
+    },
+    {
+        "subject": "Data Analysis for Thesis",
+        "writer": "1",
+        "year": 1404,
+        "semester": "Second",
+        "examiners": [
+            "P005",
+            "P004"
+        ],
+        "supervisor": "P001",
+        "score": 16
+    },
+    {
+        "subject": "Data Analysis for Thesis",
+        "writer": "1",
+        "year": 1404,
+        "semester": "Second",
+        "examiners": [
+            "P005",
+            "P004"
+        ],
+        "supervisor": "P001",
+        "score": 16
+    }
+]
